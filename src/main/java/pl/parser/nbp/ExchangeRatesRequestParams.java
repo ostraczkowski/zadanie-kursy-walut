@@ -1,10 +1,10 @@
+/**
+ * Created by Oskar Strączkowski on 11.11.16.
+ */
 package pl.parser.nbp;
 
 import java.util.Date;
 
-/**
- * Created by oskar on 11.11.16.
- */
 class ExchangeRatesRequestParams {
 
     private final String currency;

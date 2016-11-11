@@ -1,8 +1,8 @@
+/**
+ * Created by Oskar Strączkowski on 11.11.16.
+ */
 package pl.parser.nbp;
 
-/**
- * Created by oskar on 11.11.16.
- */
 public class MainClass {
 
     public static void main(final String[] args) {
@@ -11,9 +11,10 @@ public class MainClass {
             final ExchangeRatesRequestParams requestParams = inputHandler.readRequestParams();
             final RequestsHandler requestsHandler = new RequestsHandler();
             final ExchangeRatesResponseData responseData = requestsHandler.readExchangeRates(requestParams);
-            final ExchangeRatesCalculator calculator = new ExchangeRatesCalculator();
-            final ExchangeRatesCalculationResult result = calculator.calculate(responseData.getSellingRates()).getResult();
-            printResult(result.getAverage(), result.getStdDeviation());
+
+            final Double average = StatisticsCalculator.average(responseData.getBuyingRates());
+            final Double stdDeviation = StatisticsCalculator.stdDeviation(responseData.getSellingRates());
+            printResult(average, stdDeviation);
         } catch (Exception e) {
             printError(e.getMessage());
         }

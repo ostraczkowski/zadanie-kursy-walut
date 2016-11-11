@@ -1,10 +1,17 @@
+/**
+ * Created by Oskar Strączkowski on 11.11.16.
+ */
 package pl.parser.nbp;
 
-/**
- * Created by oskar on 11.11.16.
- */
-public class ExchangeRatesResponseData {
-    public double[] getSellingRates() {
+class ExchangeRatesResponseData {
+
+    double[] getBuyingRates() {
+        // TODO: implement
+        return null;
+    }
+
+    double[] getSellingRates() {
+        // TODO: implement
         return null;
     }
 }

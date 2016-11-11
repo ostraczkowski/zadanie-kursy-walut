@@ -5,9 +5,9 @@ package pl.parser.nbp;
 
 import org.junit.Test;
 
-public class ExchangeRatesCalculatorTests {
+public class StatisticsCalculatorTests {
 
-    private ExchangeRatesCalculator calculator;
+    private StatisticsCalculator calculator;
 
     @Test
     public void testCalculate() {
