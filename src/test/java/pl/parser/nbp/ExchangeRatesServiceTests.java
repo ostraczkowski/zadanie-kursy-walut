@@ -10,6 +10,6 @@ public class ExchangeRatesServiceTests {
     @Test
     public void testReadingExchangeRates() {
         // TODO: implement
-        // TODO: assure readExchangeRatesFromApi is called when period <= 93 days and readExchangeRatesFromArchiveFiles otherwise
+        // TODO: assure readFromApi is called when period <= 93 days and readFromArchiveFiles otherwise
     }
 }

@@ -14,9 +14,6 @@ import java.io.InputStream;
  */
 class ExchangeRatesXmlParser {
 
-    private static final ExchangeRatesXmlHandler XML_FROM_API_HANDLER = new XmlFromApiHandler();
-    private static final ExchangeRatesXmlHandler XML_FROM_FILE_HANDLER = new XmlFromFileHandler();
-
     /**
      * @param inputStream input stream with XML data
      * @return exchange rates parsed from XML retrieved via NBP API.
@@ -24,23 +21,23 @@ class ExchangeRatesXmlParser {
      * @throws SAXException
      * @throws IOException
      */
-    static ExchangeRates parseXmlFromApi(final InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
-        return parseXml(XML_FROM_API_HANDLER, inputStream);
+    static ExchangeRatesXmlHandler parseXmlFromApi(final InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
+        XmlFromApiHandler xmlHandler = new XmlFromApiHandler();
+        xmlHandler.parseDocument(inputStream);
+        return xmlHandler;
     }
 
     /**
      * @param inputStream input stream with XML data
-     * @return exchange rates parsed from XML retrieved from NBP archive data.
+     * @param currency    currency for which values should be parsed.
+     * @return XML handler with values parsed from XML.
      * @throws ParserConfigurationException
      * @throws SAXException
      * @throws IOException
      */
-    static ExchangeRates parseXmlFromArchiveFile(final InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
-        return parseXml(XML_FROM_FILE_HANDLER, inputStream);
-    }
-
-    private static ExchangeRates parseXml(final ExchangeRatesXmlHandler xmlHandler, final InputStream xmlInputStream) throws IOException, SAXException, ParserConfigurationException {
-        xmlHandler.parseDocument(xmlInputStream);
-        return new ExchangeRates(xmlHandler.getBidRates(), xmlHandler.getAskRates());
+    static ExchangeRatesXmlHandler parseXmlFromArchiveFile(final InputStream inputStream, final String currency) throws ParserConfigurationException, SAXException, IOException {
+        XmlFromArchiveFileHandler xmlHandler = new XmlFromArchiveFileHandler(currency);
+        xmlHandler.parseDocument(inputStream);
+        return xmlHandler;
     }
 }

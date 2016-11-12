@@ -3,6 +3,8 @@
  */
 package pl.parser.nbp;
 
+import java.util.Arrays;
+
 /**
  * Immutable POJO which holds response data.
  */
@@ -16,6 +18,7 @@ class ExchangeRates {
      * @param askRates list of ask exchange rates for given currency read from NBP
      */
     ExchangeRates(final Double[] bidRates, final Double[] askRates) {
+        // TODO: nullcheck
         this.bidRates = bidRates;
         this.askRates = askRates;
     }
@@ -26,5 +29,14 @@ class ExchangeRates {
 
     Double[] getAskRates() {
         return askRates;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ExchangeRates)) {
+            return false;
+        }
+        final ExchangeRates other = (ExchangeRates) obj;
+        return Arrays.equals(this.bidRates, other.bidRates) && Arrays.equals(this.askRates, other.askRates);
     }
 }
