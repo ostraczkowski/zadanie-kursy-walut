@@ -5,7 +5,7 @@ package pl.parser.nbp;
 
 import org.junit.Test;
 
-public class RequestsManagerTests {
+public class ExchangeRatesRequestsManagerTests {
 
     @Test
     public void testReadingExchangeRates() {

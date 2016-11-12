@@ -3,19 +3,37 @@
  */
 package pl.parser.nbp;
 
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+
 public class MainClass {
 
     public static void main(final String[] args) {
         try {
-            final ExchangeRatesRequestParams requestParams = InputParser.parseInput(args);
-            final RequestsManager requestsManager = new RequestsManager();
-            final ExchangeRatesResponseData responseData = requestsManager.readExchangeRates(requestParams);
+            final QueryParams queryParams = InputParser.parseInput(args);
+            final ExchangeRatesService exchangeRatesService = new ExchangeRatesService();
+            final ExchangeRates exchangeRates = exchangeRatesService.readExchangeRates(
+                    queryParams.getCurrency(),
+                    queryParams.getDateFrom(),
+                    queryParams.getDateTo()
+            );
 
-            final Double average = StatisticsCalculator.average(responseData.getBidRates());
-            final Double stdDeviation = StatisticsCalculator.stdDeviation(responseData.getAskRates());
+            final Double average = StatisticsCalculator.average(exchangeRates.getBidRates());
+            final Double stdDeviation = StatisticsCalculator.stdDeviation(exchangeRates.getAskRates());
             printResult(average, stdDeviation);
+
         } catch (IllegalArgumentException iae) {
             printError(iae.getMessage());
+        } catch (IOException ioe) {
+            printError("No connection to the server");
+        } catch (ParserConfigurationException e) {
+            // TODO: handle properly
+            e.printStackTrace();
+        } catch (SAXException e) {
+            // TODO: handle properly
+            e.printStackTrace();
         }
     }
 
@@ -25,6 +43,6 @@ public class MainClass {
     }
 
     private static void printError(final String message) {
-        System.out.println(message);
+        System.out.println("Error: " + message);
     }
 }

@@ -22,7 +22,7 @@ public class InputParserTests {
         final String dateToArg = "2013-01-31";
 
         // when
-        final ExchangeRatesRequestParams params = InputParser.parseInput(new String[]{currencyArg, dateFromArg, dateToArg});
+        final QueryParams params = InputParser.parseInput(new String[]{currencyArg, dateFromArg, dateToArg});
 
         // then
         assertEquals(currencyArg, params.getCurrency());

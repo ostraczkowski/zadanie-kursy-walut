@@ -8,7 +8,7 @@ import java.time.LocalDate;
 /**
  * Immutable POJO which holds request parameters.
  */
-class ExchangeRatesRequestParams {
+class QueryParams {
 
     private final String currency;
     private final LocalDate dateFrom;
@@ -19,7 +19,7 @@ class ExchangeRatesRequestParams {
      * @param dateFrom date from which the exchange rate should be calculated (inclusive)
      * @param dateTo   date to which the exchange rate should be calculated (inclusive)
      */
-    ExchangeRatesRequestParams(final String currency, final LocalDate dateFrom, final LocalDate dateTo) {
+    QueryParams(final String currency, final LocalDate dateFrom, final LocalDate dateTo) {
         this.currency = currency;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;

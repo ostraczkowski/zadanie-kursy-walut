@@ -6,25 +6,25 @@ package pl.parser.nbp;
 /**
  * Immutable POJO which holds response data.
  */
-class ExchangeRatesResponseData {
+class ExchangeRates {
 
-    private final double[] bidRates;
-    private final double[] askRates;
+    private final Double[] bidRates;
+    private final Double[] askRates;
 
     /**
      * @param bidRates list of bid exchange rates for given currency read from NBP
      * @param askRates list of ask exchange rates for given currency read from NBP
      */
-    ExchangeRatesResponseData(final double[] bidRates, final double[] askRates) {
+    ExchangeRates(final Double[] bidRates, final Double[] askRates) {
         this.bidRates = bidRates;
         this.askRates = askRates;
     }
 
-    double[] getBidRates() {
+    Double[] getBidRates() {
         return bidRates;
     }
 
-    double[] getAskRates() {
+    Double[] getAskRates() {
         return askRates;
     }
 }
