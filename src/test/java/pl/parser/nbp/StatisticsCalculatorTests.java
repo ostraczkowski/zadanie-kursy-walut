@@ -15,9 +15,19 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class StatisticsCalculatorTests {
 
+    // given
     private double[] testValues;
     private Double expectedAverage;
     private Double expectedStdDeviation;
+
+    @Parameterized.Parameters
+    public static Collection getTestParameters() {
+        return Arrays.asList(new Object[][]{
+                {new double[]{0.1}, 0.1, 0.0},
+                {new double[]{0.1, 0.9}, 0.5, 0.4},
+                {new double[]{600.0, 470.0, 170.0, 430.0, 300.0}, 394.0, 147.32277488562318}
+        });
+    }
 
     public StatisticsCalculatorTests(final double[] testValues, final Double average, final Double stdDeviation) {
         this.testValues = testValues;
@@ -25,24 +35,21 @@ public class StatisticsCalculatorTests {
         this.expectedStdDeviation = stdDeviation;
     }
 
-    @Parameterized.Parameters
-    public static Collection getTestParameters() {
-        return Arrays.asList(new Object[][] {
-                { new double[] { 0.1 }, 0.1, 0.0 },
-                { new double[] { 0.1, 0.9 }, 0.5, 0.4 },
-                { new double[] { 600.0, 470.0, 170.0, 430.0, 300.0 }, 394.0, 147.32277488562318 }
-        });
-    }
-
     @Test
     public void testAverageCalculation() {
+        // when
         final Double actualResult = StatisticsCalculator.average(testValues);
+
+        // then
         assertEquals(expectedAverage, actualResult);
     }
 
     @Test
     public void testStdDeviationCalculation() {
+        // when
         final Double actualResult = StatisticsCalculator.stdDeviation(testValues);
+
+        // then
         assertEquals(expectedStdDeviation, actualResult);
     }
 }

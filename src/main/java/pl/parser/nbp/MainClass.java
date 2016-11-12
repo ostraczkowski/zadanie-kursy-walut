@@ -6,17 +6,16 @@ package pl.parser.nbp;
 public class MainClass {
 
     public static void main(final String[] args) {
-        final InputHandler inputHandler = new InputHandler();
         try {
-            final ExchangeRatesRequestParams requestParams = inputHandler.readRequestParams();
+            final ExchangeRatesRequestParams requestParams = InputParser.parseInput(args);
             final RequestsHandler requestsHandler = new RequestsHandler();
             final ExchangeRatesResponseData responseData = requestsHandler.readExchangeRates(requestParams);
 
             final Double average = StatisticsCalculator.average(responseData.getBuyingRates());
             final Double stdDeviation = StatisticsCalculator.stdDeviation(responseData.getSellingRates());
             printResult(average, stdDeviation);
-        } catch (Exception e) {
-            printError(e.getMessage());
+        } catch (IllegalArgumentException iae) {
+            printError(iae.getMessage());
         }
     }
 

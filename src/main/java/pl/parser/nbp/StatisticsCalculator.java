@@ -6,7 +6,7 @@ package pl.parser.nbp;
 import java.util.Arrays;
 
 /**
- * Utility class with methods to calculate some statistics.
+ * Utility class with methods to calculate required statistics.
  */
 class StatisticsCalculator {
 
@@ -16,7 +16,7 @@ class StatisticsCalculator {
      */
     static Double average(final double... values) {
         if (values.length == 0) {
-            throw new IllegalArgumentException("Unexpected empty list");
+            throw new IllegalArgumentException("Values list must not be empty");
         }
         return Arrays.stream(values).summaryStatistics().getAverage();
     }
@@ -27,7 +27,7 @@ class StatisticsCalculator {
      */
     static Double stdDeviation(final double... values) {
         if (values.length == 0) {
-            throw new IllegalArgumentException("Unexpected empty list");
+            throw new IllegalArgumentException("Values list must not be empty");
         }
 
         final double average = average(values);
