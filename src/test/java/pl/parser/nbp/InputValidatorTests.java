@@ -37,7 +37,7 @@ public class InputValidatorTests {
         boolean result = inputValidator.isInputValid(new String[]{currencyArg, dateFromArg, dateToArg});
 
         // then
-        assertEquals(true, result);
+        assertEquals(false, result);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class InputValidatorTests {
         boolean result = inputValidator.isInputValid(new String[]{currencyArg, dateFromArg, dateToArg});
 
         // then
-        assertEquals(true, result);
+        assertEquals(false, result);
     }
 
     @Test
@@ -65,6 +65,6 @@ public class InputValidatorTests {
         boolean result = inputValidator.isInputValid(new String[]{currencyArg, dateFromArg, dateToArg});
 
         // then
-        assertEquals(true, result);
+        assertEquals(false, result);
     }
 }

@@ -16,20 +16,20 @@ import static org.junit.Assert.assertEquals;
 public class StatisticsCalculatorTests {
 
     // given
-    private double[] testValues;
+    private Double[] testValues;
     private Double expectedAverage;
     private Double expectedStdDeviation;
 
     @Parameterized.Parameters
     public static Collection getTestParameters() {
         return Arrays.asList(new Object[][]{
-                {new double[]{0.1}, 0.1, 0.0},
-                {new double[]{0.1, 0.9}, 0.5, 0.4},
-                {new double[]{600.0, 470.0, 170.0, 430.0, 300.0}, 394.0, 147.32277488562318}
+                {new Double[]{0.1}, 0.1, 0.0},
+                {new Double[]{0.1, 0.9}, 0.5, 0.4},
+                {new Double[]{600.0, 470.0, 170.0, 430.0, 300.0}, 394.0, 147.32277488562318}
         });
     }
 
-    public StatisticsCalculatorTests(final double[] testValues, final Double average, final Double stdDeviation) {
+    public StatisticsCalculatorTests(final Double[] testValues, final Double average, final Double stdDeviation) {
         this.testValues = testValues;
         this.expectedAverage = average;
         this.expectedStdDeviation = stdDeviation;
