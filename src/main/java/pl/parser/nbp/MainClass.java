@@ -11,30 +11,35 @@ import java.io.IOException;
 public class MainClass {
 
     public static void main(final String[] args) {
+        // read the input
+        final InputValidator inputValidator = new InputValidator();
+        if (!inputValidator.isInputValid(args)) {
+            printError(inputValidator.getErrorMessage());
+            return;
+        }
+        final String currency = args[0];
+        final String startDate = args[1];
+        final String endDate = args[1];
+
+        // read exchange rates
+        final ExchangeRatesService exchangeRatesService = new ExchangeRatesService();
+        final ExchangeRates exchangeRates;
         try {
-            final QueryParams queryParams = InputParser.parseInput(args);
-            final ExchangeRatesService exchangeRatesService = new ExchangeRatesService();
-            final ExchangeRates exchangeRates = exchangeRatesService.readExchangeRates(
-                    queryParams.getCurrency(),
-                    queryParams.getDateFrom(),
-                    queryParams.getDateTo()
-            );
-
-            final Double average = StatisticsCalculator.average(exchangeRates.getBidRates());
-            final Double stdDeviation = StatisticsCalculator.stdDeviation(exchangeRates.getAskRates());
-            printResult(average, stdDeviation);
-
-        } catch (IllegalArgumentException iae) {
-            printError(iae.getMessage());
+            exchangeRates = exchangeRatesService.readExchangeRates(currency, startDate, endDate);
         } catch (IOException ioe) {
             printError("No connection to the server");
-        } catch (ParserConfigurationException e) {
-            // TODO: handle properly
-            e.printStackTrace();
-        } catch (SAXException e) {
-            // TODO: handle properly
-            e.printStackTrace();
+            return;
+        } catch (ParserConfigurationException | SAXException e) {
+            printError("Invalid XML data");
+            return;
         }
+
+        // calculate the result
+        final Double average = StatisticsCalculator.average(exchangeRates.getBidRates());
+        final Double stdDeviation = StatisticsCalculator.stdDeviation(exchangeRates.getAskRates());
+
+        printResult(average, stdDeviation);
+
     }
 
     private static void printResult(final double averageRage, final double standardDeviation) {
@@ -46,3 +51,4 @@ public class MainClass {
         System.out.println("Error: " + message);
     }
 }
+

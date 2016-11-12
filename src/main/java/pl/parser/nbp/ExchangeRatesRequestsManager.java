@@ -10,12 +10,11 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
 
 class ExchangeRatesRequestsManager {
 
 
-    static InputStream readExchangeRatesFromApi(final String currency, final LocalDate dateFrom, final LocalDate dateTo) throws IOException {
+    static InputStream readExchangeRatesFromApi(final String currency, final String dateFrom, final String dateTo) throws IOException {
         final String url = String.format("http://api.nbp.pl/api/exchangerates/rates/c/%s/%s/%s", currency, dateFrom, dateTo);
         final HttpClient client = HttpClientBuilder.create().build();
         final HttpGet request = new HttpGet(url);
@@ -24,7 +23,7 @@ class ExchangeRatesRequestsManager {
         return response.getEntity().getContent();
     }
 
-    static InputStream readExchangeRatesFromArchiveFiles(final String currency, final LocalDate dateFrom, final LocalDate dateTo) {
+    static InputStream readExchangeRatesFromArchiveFiles(final String currency, final String dateFrom, final String dateTo) {
         // TODO: implement
         // http://www.nbp.pl/kursy/xml/dir.txt
         // odczytac kod nnn pierwszej tabeli
