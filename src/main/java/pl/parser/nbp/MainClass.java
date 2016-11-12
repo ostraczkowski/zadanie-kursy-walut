@@ -8,11 +8,11 @@ public class MainClass {
     public static void main(final String[] args) {
         try {
             final ExchangeRatesRequestParams requestParams = InputParser.parseInput(args);
-            final RequestsHandler requestsHandler = new RequestsHandler();
-            final ExchangeRatesResponseData responseData = requestsHandler.readExchangeRates(requestParams);
+            final RequestsManager requestsManager = new RequestsManager();
+            final ExchangeRatesResponseData responseData = requestsManager.readExchangeRates(requestParams);
 
-            final Double average = StatisticsCalculator.average(responseData.getBuyingRates());
-            final Double stdDeviation = StatisticsCalculator.stdDeviation(responseData.getSellingRates());
+            final Double average = StatisticsCalculator.average(responseData.getBidRates());
+            final Double stdDeviation = StatisticsCalculator.stdDeviation(responseData.getAskRates());
             printResult(average, stdDeviation);
         } catch (IllegalArgumentException iae) {
             printError(iae.getMessage());

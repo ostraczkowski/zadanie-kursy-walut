@@ -3,31 +3,37 @@
  */
 package pl.parser.nbp;
 
-import java.util.Date;
+import java.time.LocalDate;
 
+/**
+ * Immutable POJO which holds request parameters.
+ */
 class ExchangeRatesRequestParams {
 
     private final String currency;
-    private final Date dateFrom;
-    private final Date dateTo;
+    private final LocalDate dateFrom;
+    private final LocalDate dateTo;
 
-    ExchangeRatesRequestParams(final String currency, final Date dateFrom, final Date dateTo) {
+    /**
+     * @param currency currency for which exchange rate should be checked
+     * @param dateFrom date from which the exchange rate should be calculated (inclusive)
+     * @param dateTo   date to which the exchange rate should be calculated (inclusive)
+     */
+    ExchangeRatesRequestParams(final String currency, final LocalDate dateFrom, final LocalDate dateTo) {
         this.currency = currency;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
     }
 
-    public String getCurrency() {
+    String getCurrency() {
         return currency;
     }
 
-    public Date getDateFrom() {
-        // TODO: immutable
-        return dateFrom;
+    LocalDate getDateFrom() {
+        return dateFrom; // TODO: return copy
     }
 
-    public Date getDateTo() {
-        // TODO: immutable
-        return dateTo;
+    LocalDate getDateTo() {
+        return dateTo; // TODO: return copy
     }
 }
