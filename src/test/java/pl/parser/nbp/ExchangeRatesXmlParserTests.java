@@ -3,6 +3,19 @@
  */
 package pl.parser.nbp;
 
+import org.junit.Test;
+
 public class ExchangeRatesXmlParserTests {
-    // TODO: implement
+
+    @Test
+    public void testParsingXmlFromApi() {
+        // TODO: implement
+        // TODO: read InputStream as FileInputStream from sample-api-data.xml
+    }
+
+    @Test
+    public void testParsingXmlFromArchiveFile() {
+        // TODO: implement
+        // TODO: read InputStream as FileInputStream from sample-archive-file-data.xml
+    }
 }

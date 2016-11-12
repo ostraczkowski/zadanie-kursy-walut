@@ -11,6 +11,9 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Period;
 
+/**
+ * Service which reads exchange rates for given currency and given period of time.
+ */
 class ExchangeRatesService {
 
     /**

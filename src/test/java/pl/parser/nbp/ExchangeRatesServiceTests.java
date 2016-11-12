@@ -3,6 +3,13 @@
  */
 package pl.parser.nbp;
 
+import org.junit.Test;
+
 public class ExchangeRatesServiceTests {
-    // TODO: implement
+
+    @Test
+    public void testReadingExchangeRates() {
+        // TODO: implement
+        // TODO: assure readExchangeRatesFromApi is called when period <= 93 days and readExchangeRatesFromArchiveFiles otherwise
+    }
 }
