@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Ulitity class with methods to parse input parameters.
+ * Utility class with methods to validate input arguments.
  */
 class InputValidator {
 

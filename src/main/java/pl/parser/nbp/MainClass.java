@@ -8,29 +8,30 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
+/**
+ * Main class of the application.
+ */
 public class MainClass {
 
+    /**
+     * Main method of the application.
+     *
+     * @param args exactly three arguments expected given as <currency> <date from> <date to> (e.g. EUR 2013-01-28 2013-01-31)
+     */
     public static void main(final String[] args) {
-        // read the input
-        final InputValidator inputValidator = new InputValidator();
-        if (!inputValidator.isInputValid(args)) {
-            printError(inputValidator.getErrorMessage());
+        final QueryParams queryParams;
+        try {
+            queryParams = readAndValidateQueryParams(args);
+        } catch (IllegalArgumentException iae) {
+            printError(iae.getMessage());
             return;
         }
-        final String currency = args[0];
-        final String startDate = args[1];
-        final String endDate = args[1];
 
-        // read exchange rates
-        final ExchangeRatesService exchangeRatesService = new ExchangeRatesService();
         final ExchangeRates exchangeRates;
         try {
-            exchangeRates = exchangeRatesService.readExchangeRates(currency, startDate, endDate);
-        } catch (IOException ioe) {
-            printError("No connection to the server");
-            return;
-        } catch (ParserConfigurationException | SAXException e) {
-            printError("Invalid XML data");
+            exchangeRates = readExchangeRates(queryParams);
+        } catch (IOException | ParserConfigurationException | SAXException e) {
+            printError(e.getMessage());
             return;
         }
 
@@ -39,7 +40,31 @@ public class MainClass {
         final Double stdDeviation = StatisticsCalculator.stdDeviation(exchangeRates.getAskRates());
 
         printResult(average, stdDeviation);
+    }
 
+    private static QueryParams readAndValidateQueryParams(final String[] args) throws IllegalArgumentException {
+        final InputValidator inputValidator = new InputValidator();
+        if (!inputValidator.isInputValid(args)) {
+            throw new IllegalArgumentException(inputValidator.getErrorMessage());
+        }
+        return new QueryParams(args[0], args[1], args[2]);
+    }
+
+    private static ExchangeRates readExchangeRates(final QueryParams queryParams) throws IOException, ParserConfigurationException, SAXException {
+        final ExchangeRatesService exchangeRatesService = new ExchangeRatesService();
+        try {
+            return exchangeRatesService.readExchangeRates(
+                    queryParams.getCurrency(),
+                    queryParams.getStartDate(),
+                    queryParams.getEndDate()
+            );
+        } catch (IOException ioe) {
+            throw new IOException("No connection to the server", ioe);
+        } catch (ParserConfigurationException pce) {
+            throw new ParserConfigurationException("Invalid XML parser configuration");
+        } catch (SAXException se) {
+            throw new SAXException("Invalid XML data", se);
+        }
     }
 
     private static void printResult(final double averageRage, final double standardDeviation) {
@@ -51,4 +76,3 @@ public class MainClass {
         System.out.println("Error: " + message);
     }
 }
-
