@@ -5,6 +5,9 @@ package pl.parser.nbp;
 
 import org.xml.sax.SAXException;
 
+/**
+ * Specific handler implementation to parse XML data retrieved via NBP API.
+ */
 class XmlFromApiHandler extends ExchangeRatesXmlHandler {
 
     @Override

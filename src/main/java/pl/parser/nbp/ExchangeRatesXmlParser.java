@@ -35,7 +35,7 @@ class ExchangeRatesXmlParser {
      * @throws SAXException
      * @throws IOException
      */
-    static ExchangeRates parseXmlFromFile(final InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
+    static ExchangeRates parseXmlFromArchiveFile(final InputStream inputStream) throws ParserConfigurationException, SAXException, IOException {
         return parseXml(XML_FROM_FILE_HANDLER, inputStream);
     }
 

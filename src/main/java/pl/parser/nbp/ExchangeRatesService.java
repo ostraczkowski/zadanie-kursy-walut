@@ -31,7 +31,7 @@ class ExchangeRatesService {
             return ExchangeRatesXmlParser.parseXmlFromApi(inputStream);
         } else {
             final InputStream inputStream = ExchangeRatesRequestsManager.readExchangeRatesFromArchiveFiles(currency, dateFrom, dateTo);
-            return ExchangeRatesXmlParser.parseXmlFromFile(inputStream);
+            return ExchangeRatesXmlParser.parseXmlFromArchiveFile(inputStream);
         }
     }
 }

@@ -14,6 +14,9 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Abstract class with common methods to handle XML response to requested query.
+ */
 abstract class ExchangeRatesXmlHandler extends DefaultHandler {
 
     final List<Double> bidRates = new LinkedList<>();
