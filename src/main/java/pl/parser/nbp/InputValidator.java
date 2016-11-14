@@ -55,6 +55,7 @@ class InputValidator {
         return true;
     }
 
+    // TODO: implement endDate <= Year.now()
     private boolean areDatesValid(final String dateFromString, final String dateToString) {
         final LocalDate dateFrom = LocalDate.parse(dateFromString, DTF);
         final LocalDate dateTo = LocalDate.parse(dateToString, DTF);

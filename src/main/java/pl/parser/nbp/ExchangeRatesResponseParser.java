@@ -12,7 +12,7 @@ import java.io.InputStream;
 /**
  * Utility class with methods to parse XML response with exchange rates.
  */
-class ExchangeRatesXmlParser {
+class ExchangeRatesResponseParser {
 
     /**
      * @param inputStream input stream with XML data

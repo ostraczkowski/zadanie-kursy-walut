@@ -5,11 +5,15 @@ package pl.parser.nbp;
 
 import org.junit.Test;
 
-public class ExchangeRatesRequestsManagerTests {
+public class ExchangeRatesRequestsHelperTests {
 
     @Test
-    public void testReadingExchangeRates() {
+    public void test() {
         // TODO: implement
+//    static InputStream readFromApi(final String currency, final String startDate, final String endDate) throws IOException
+//    static InputStream readFromFileArchivedYear(final int year) throws IOException
+//    static InputStream readFromFileCurrentYear() throws IOException
+
         // 92 dni
         // 93 dni
         // pelen zakres od poczatku 2002

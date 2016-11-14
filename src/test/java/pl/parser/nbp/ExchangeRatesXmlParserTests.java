@@ -25,7 +25,7 @@ public class ExchangeRatesXmlParserTests {
         // when
         final ExchangeRatesXmlHandler actualResult;
         try {
-            actualResult = ExchangeRatesXmlParser.parseXmlFromApi(inputStream);
+            actualResult = ExchangeRatesResponseParser.parseXmlFromApi(inputStream);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             fail(e.getMessage());
             return;
@@ -48,7 +48,7 @@ public class ExchangeRatesXmlParserTests {
         // when
         final ExchangeRatesXmlHandler actualResult;
         try {
-            actualResult = ExchangeRatesXmlParser.parseXmlFromArchiveFile(inputStream, currency);
+            actualResult = ExchangeRatesResponseParser.parseXmlFromArchiveFile(inputStream, currency);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             fail(e.getMessage());
             return;
