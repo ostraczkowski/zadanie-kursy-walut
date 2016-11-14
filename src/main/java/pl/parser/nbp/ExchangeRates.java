@@ -15,6 +15,10 @@ class ExchangeRates {
 
     private final Double[] bidRates;
     private final Double[] askRates;
+    private Double avgBidRate = null;
+    private Double stdDevBidRate = null;
+    private Double avgAskRate = null;
+    private Double stdDevAskRate = null;
 
     /**
      * @param bidRates list of bid exchange rates for given currency read from NBP
@@ -37,6 +41,38 @@ class ExchangeRates {
     @Nonnull
     Double[] getAskRates() {
         return askRates;
+    }
+
+    @Nonnull
+    Double getAvgBidRate() {
+        if (avgBidRate == null) {
+            avgBidRate = StatisticsCalculator.average(bidRates);
+        }
+        return avgBidRate;
+    }
+
+    @Nonnull
+    Double getStdDevBidRate() {
+        if (stdDevBidRate == null) {
+            stdDevBidRate = StatisticsCalculator.stdDeviation(bidRates);
+        }
+        return stdDevBidRate;
+    }
+
+    @Nonnull
+    Double getAvgAskRate() {
+        if (avgAskRate == null) {
+            avgAskRate = StatisticsCalculator.average(askRates);
+        }
+        return avgAskRate;
+    }
+
+    @Nonnull
+    Double getStdDevAskRate() {
+        if (stdDevAskRate == null) {
+            stdDevAskRate = StatisticsCalculator.stdDeviation(askRates);
+        }
+        return stdDevAskRate;
     }
 
     @Override

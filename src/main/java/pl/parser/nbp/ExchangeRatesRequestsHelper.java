@@ -37,7 +37,8 @@ class ExchangeRatesRequestsHelper {
      * @throws IOException
      */
     @Nonnull
-    InputStream getQueryResultStream(@Nonnull final String currency, @Nonnull final String startDateString, @Nonnull final String endDateString) throws IOException {
+    InputStream getQueryResultStream(@Nonnull final String currency, @Nonnull final String startDateString, @Nonnull final String endDateString)
+            throws IOException {
         requireNonNull(currency, "'currency' must not be null");
         requireNonNull(startDateString, "'startDateString' must not be null");
         requireNonNull(endDateString, "'endDateString' must not be null");
@@ -52,7 +53,8 @@ class ExchangeRatesRequestsHelper {
      * @throws IOException
      */
     @Nonnull
-    InputStream getArchivedFileStream(@Nonnull final String fileName) throws IOException {
+    InputStream getArchivedFileStream(@Nonnull final String fileName)
+            throws IOException {
         requireNonNull(fileName, "'fileName' must not be null");
 
         final String url = String.format("http://www.nbp.pl/kursy/xml/%s", fileName);
@@ -65,7 +67,8 @@ class ExchangeRatesRequestsHelper {
      * @throws IOException
      */
     @Nonnull
-    InputStream getArchivedFilesIndexStream(final int year) throws IOException {
+    InputStream getArchivedFilesIndexStream(final int year)
+            throws IOException {
         if (year < Year.now().getValue()) {
             final String url = String.format("http://www.nbp.pl/kursy/xml/dir%s.txt", year);
             return readXmlStream(url);

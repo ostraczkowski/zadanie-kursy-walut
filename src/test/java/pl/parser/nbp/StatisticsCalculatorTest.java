@@ -13,7 +13,7 @@ import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class StatisticsCalculatorTests {
+public class StatisticsCalculatorTest {
 
     // given
     private Double[] testValues;
@@ -29,7 +29,7 @@ public class StatisticsCalculatorTests {
         });
     }
 
-    public StatisticsCalculatorTests(final Double[] testValues, final Double average, final Double stdDeviation) {
+    public StatisticsCalculatorTest(final Double[] testValues, final Double average, final Double stdDeviation) {
         this.testValues = testValues;
         this.expectedAverage = average;
         this.expectedStdDeviation = stdDeviation;

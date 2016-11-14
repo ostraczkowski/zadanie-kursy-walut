@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class InputValidatorTests {
+public class InputValidatorTest {
 
     // TODO: DJ?
     private InputValidator inputValidator = new InputValidator();

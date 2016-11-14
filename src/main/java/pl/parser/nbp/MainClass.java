@@ -37,16 +37,15 @@ public class MainClass {
         }
 
         try {
-            final Double average = StatisticsCalculator.average(exchangeRates.getBidRates());
-            final Double stdDeviation = StatisticsCalculator.stdDeviation(exchangeRates.getAskRates());
-            printResult(average, stdDeviation);
+            printResult(exchangeRates.getAvgBidRate(), exchangeRates.getStdDevAskRate());
         } catch (IllegalArgumentException e) {
             printError(e.getMessage());
         }
     }
 
     @Nonnull
-    private static QueryParams readAndValidateQueryParams(@Nonnull final String[] args) {
+    private static QueryParams readAndValidateQueryParams(@Nonnull final String[] args)
+            throws IllegalArgumentException {
         final InputValidator inputValidator = new InputValidator();
         if (!inputValidator.isInputValid(args)) {
             throw new IllegalArgumentException(inputValidator.getErrorMessage());
@@ -55,7 +54,8 @@ public class MainClass {
     }
 
     @Nonnull
-    private static ExchangeRates readExchangeRates(@Nonnull final QueryParams queryParams) throws IOException, ParserConfigurationException, SAXException {
+    private static ExchangeRates readExchangeRates(@Nonnull final QueryParams queryParams)
+            throws IOException, ParserConfigurationException, SAXException {
         final ExchangeRatesService exchangeRatesService = new ExchangeRatesService();
         try {
             return exchangeRatesService.readExchangeRates(
@@ -73,8 +73,8 @@ public class MainClass {
     }
 
     private static void printResult(final double averageRage, final double standardDeviation) {
-        System.out.println(averageRage);
-        System.out.println(standardDeviation);
+        System.out.println(String.format("%.3g%n", averageRage));
+        System.out.println(String.format("%.3g%n", standardDeviation));
     }
 
     private static void printError(@Nonnull final String message) {

@@ -17,10 +17,10 @@ import static java.util.Objects.requireNonNull;
  */
 class InputValidator {
 
-    final static String DATE_FORMAT = "yyyy-MM-dd";
+    private final static String DATE_FORMAT = "yyyy-MM-dd";
+    final static DateTimeFormatter DTF = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
     private final static String EARLIEST_DATE_AVAILABLE_STRING = "2002-01-02";
-    private final static DateTimeFormatter DTF = DateTimeFormatter.ofPattern(DATE_FORMAT);
     private final static LocalDate EARLIEST_DATE_AVAILABLE;
 
     static {
