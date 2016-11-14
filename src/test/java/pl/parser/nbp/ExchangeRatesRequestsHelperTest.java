@@ -4,6 +4,7 @@
 package pl.parser.nbp;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedReader;
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Integration tests for getting proper stream data from NBP.
  */
+@Category(IntegrationTest.class)
 public class ExchangeRatesRequestsHelperTest {
 
     private final ExchangeRatesRequestsHelper requestsHelper = new ExchangeRatesRequestsHelper(); // TODO: DI?

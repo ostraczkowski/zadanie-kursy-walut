@@ -9,12 +9,13 @@ import java.util.Arrays;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Immutable POJO which holds response data.
+ * Immutable POJO which holds response data with methods returning basic statistics related to exchange rates.
  */
 class ExchangeRates {
 
     private final Double[] bidRates;
     private final Double[] askRates;
+
     private Double avgBidRate = null;
     private Double stdDevBidRate = null;
     private Double avgAskRate = null;

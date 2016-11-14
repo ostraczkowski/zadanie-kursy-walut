@@ -4,6 +4,7 @@
 package pl.parser.nbp;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.xml.sax.SAXException;
@@ -19,6 +20,7 @@ import static org.junit.Assert.fail;
 /**
  * Integration tests for reading exchange rates data from NBP.
  */
+@Category(IntegrationTest.class)
 @RunWith(Parameterized.class)
 public class ExchangeRatesServiceTest {
 
@@ -34,7 +36,10 @@ public class ExchangeRatesServiceTest {
     @Parameterized.Parameters
     public static Collection getTestParameters() {
         return Arrays.asList(new Object[][]{
-                {"EUR", "2013-01-28", "2013-01-31", 4.150525, 0.012477053939131748},
+//                {"EUR", "2002-01-02", "2002-01-02", 3.5016, 0.0}, // 1-day query
+//                {"EUR", "2013-01-28", "2013-01-31", 4.150525, 0.012477053939131748}, // 3-days query
+                {"EUR", "2002-01-02", "2002-03-31", 3.580911111111111, 0.03967698056299293},
+                {"EUR", "2002-01-02", "2016-09-01", 3.580911111111111, 0.03967698056299293},
         });
     }
 

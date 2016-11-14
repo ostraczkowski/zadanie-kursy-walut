@@ -3,6 +3,7 @@
  */
 package pl.parser.nbp;
 
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -43,8 +44,9 @@ abstract class ExchangeRatesXmlHandler extends DefaultHandler {
         requireNonNull(xmlStream, "'xmlStream' must not be null");
 
         final SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); // required to skip '<!DOCTYPE tabela_kursow SYSTEM "abch.dtd">' from XML
         final SAXParser parser = factory.newSAXParser();
-        parser.parse(xmlStream, this);
+        parser.parse(new InputSource(xmlStream), this);
     }
 
     @Nonnull

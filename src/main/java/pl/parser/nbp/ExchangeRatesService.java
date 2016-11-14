@@ -3,18 +3,18 @@
  */
 package pl.parser.nbp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 import static pl.parser.nbp.InputValidator.DTF;
@@ -23,6 +23,8 @@ import static pl.parser.nbp.InputValidator.DTF;
  * Service which reads exchange rates for given currency and given period of time.
  */
 class ExchangeRatesService {
+
+    private final static Logger LOG = LoggerFactory.getLogger(ExchangeRatesService.class);
 
     private final ExchangeRatesRequestsHelper requestsHelper = new ExchangeRatesRequestsHelper(); // TODO: DJ
 
@@ -48,8 +50,10 @@ class ExchangeRatesService {
         final LocalDate endDate = LocalDate.parse(endDateString, DTF);
         final long daysTotal = ChronoUnit.DAYS.between(startDate, endDate.plusDays(1));
         if (daysTotal <= MAX_API_PERIOD_DAYS) {
+            LOG.debug(String.format("Reading exchange rates from query=currency: %s, startDateString=%s, endDateString=%s", currency, startDateString, endDateString));
             return readExchangeRatesFromQueryResult(currency, startDateString, endDateString);
         } else {
+            LOG.debug(String.format("Reading exchange rates from archived file: currency=%s, startDateString=%s, endDateString=%s", currency, startDateString, endDateString));
             return readExchangeRatesFromArchivedFiles(currency, startDate, endDate);
         }
     }
@@ -68,11 +72,12 @@ class ExchangeRatesService {
         final List<Double> tmpBidRates = new LinkedList<>();
         final List<Double> tmpAskRates = new LinkedList<>();
         for (int year = startDate.getYear(); year <= endDate.getYear(); year++) {
-            try (BufferedReader buffer = new BufferedReader(new InputStreamReader(requestsHelper.getArchivedFilesIndexStream(year)))) {
-                while (buffer.ready()) {
-                    final String fileName = buffer.readLine();
-                    processFileIfRequired(fileName, currency, startDate, endDate, tmpBidRates, tmpAskRates);
-                }
+            final List<String> lines;
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(requestsHelper.getArchivedFilesIndexStream(year)))) {
+                lines = bufferedReader.lines().collect(Collectors.toList());
+            }
+            for (final String fileName : lines) {
+                processFileIfRequired(fileName, currency, startDate, endDate, tmpBidRates, tmpAskRates);
             }
         }
         final Double[] bidRates = tmpBidRates.toArray(new Double[tmpBidRates.size()]);
@@ -85,7 +90,7 @@ class ExchangeRatesService {
         if (isFileWithBidAndAskTable(fileName)) {
             final LocalDate fileDate = getFileDateFromName(fileName);
             if (isFileInPeriod(startDate, endDate, fileDate)) {
-                final InputStream xmlStream = requestsHelper.getArchivedFileStream(fileName);
+                final InputStream xmlStream = requestsHelper.getArchivedFileStream(fileName + ".xml");
                 final ExchangeRatesXmlHandler xmlHandler = ExchangeRatesResponseParser.parseXmlFromArchiveFile(xmlStream, currency);
                 tmpBidRates.add(xmlHandler.getBidRates()[0]);
                 tmpAskRates.add(xmlHandler.getAskRates()[0]);

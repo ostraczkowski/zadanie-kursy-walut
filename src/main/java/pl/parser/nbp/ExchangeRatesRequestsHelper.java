@@ -7,6 +7,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -20,11 +22,24 @@ import static java.util.Objects.requireNonNull;
  */
 class ExchangeRatesRequestsHelper {
 
+    private final static Logger LOG = LoggerFactory.getLogger(ExchangeRatesRequestsHelper.class);
+
+    @Nonnull
+    private static InputStream readTxtStream(@Nonnull final String url) throws IOException {
+        return readStream(url, "text/plain");
+    }
+
     @Nonnull
     private static InputStream readXmlStream(@Nonnull final String url) throws IOException {
+        return readStream(url, "application/xml");
+    }
+
+    @Nonnull
+    private static InputStream readStream(@Nonnull final String url, @Nonnull final String contentType) throws IOException {
         final HttpClient client = HttpClientBuilder.create().build();
         final HttpGet request = new HttpGet(url);
-        request.setHeader("Content-Type", "application/xml");
+        request.setHeader("Content-Type", contentType);
+        LOG.debug("Reading stream from: " + url);
         final HttpResponse response = client.execute(request);
         return response.getEntity().getContent();
     }
@@ -71,9 +86,9 @@ class ExchangeRatesRequestsHelper {
             throws IOException {
         if (year < Year.now().getValue()) {
             final String url = String.format("http://www.nbp.pl/kursy/xml/dir%s.txt", year);
-            return readXmlStream(url);
+            return readTxtStream(url);
         } else {
-            return readXmlStream("http://www.nbp.pl/kursy/xml/dir.txt");
+            return readTxtStream("http://www.nbp.pl/kursy/xml/dir.txt");
         }
     }
 }
