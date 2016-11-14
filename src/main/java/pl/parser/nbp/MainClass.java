@@ -73,8 +73,8 @@ public class MainClass {
     }
 
     private static void printResult(final double averageRage, final double standardDeviation) {
-        System.out.println(String.format("%.3g%n", averageRage));
-        System.out.println(String.format("%.3g%n", standardDeviation));
+        System.out.println(String.format("%.4f", averageRage));
+        System.out.println(String.format("%.4f", standardDeviation));
     }
 
     private static void printError(@Nonnull final String message) {
