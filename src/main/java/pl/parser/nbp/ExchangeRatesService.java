@@ -5,6 +5,7 @@ package pl.parser.nbp;
 
 import org.xml.sax.SAXException;
 
+import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +16,8 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Service which reads exchange rates for given currency and given period of time.
@@ -36,8 +39,13 @@ class ExchangeRatesService {
      * @param endDateString   end date of the period for which currency exchange rates should be calculated (inclusively)
      * @return POJO object with lists of BID and ASK rates.
      */
-    ExchangeRates readExchangeRates(final String currency, final String startDateString, final String endDateString)
+    @Nonnull
+    ExchangeRates readExchangeRates(@Nonnull final String currency, @Nonnull final String startDateString, @Nonnull final String endDateString)
             throws IOException, ParserConfigurationException, SAXException {
+        requireNonNull(currency, "'currency' must not be null");
+        requireNonNull(startDateString, "'startDateString' must not be null");
+        requireNonNull(endDateString, "'endDateString' must not be null");
+
         LocalDate startDate = LocalDate.parse(startDateString, DTF);
         LocalDate endDate = LocalDate.parse(endDateString, DTF);
         final int period = Period.between(startDate, endDate).getDays();
@@ -48,14 +56,16 @@ class ExchangeRatesService {
         }
     }
 
-    private ExchangeRates readExchangeRatesFromQueryResult(final String currency, final String startDateString, final String endDateString)
+    @Nonnull
+    private ExchangeRates readExchangeRatesFromQueryResult(@Nonnull final String currency, @Nonnull final String startDateString, @Nonnull final String endDateString)
             throws IOException, ParserConfigurationException, SAXException {
         final InputStream xmlInputStream = requestsHelper.getQueryResultStream(currency, startDateString, endDateString);
         final ExchangeRatesXmlHandler xmlHandler = ExchangeRatesResponseParser.parseXmlFromApi(xmlInputStream); // TODO: DJ
         return new ExchangeRates(xmlHandler.getBidRates(), xmlHandler.getAskRates());
     }
 
-    private ExchangeRates readExchangeRatesFromArchivedFiles(final String currency, final LocalDate startDate, final LocalDate endDate)
+    @Nonnull
+    private ExchangeRates readExchangeRatesFromArchivedFiles(@Nonnull final String currency, @Nonnull final LocalDate startDate, @Nonnull final LocalDate endDate)
             throws ParserConfigurationException, SAXException, IOException {
         final List<Double> tmpBidRates = new LinkedList<>();
         final List<Double> tmpAskRates = new LinkedList<>();
@@ -79,12 +89,13 @@ class ExchangeRatesService {
         return new ExchangeRates(bidRates, askRates);
     }
 
-    private LocalDate getFileDateFromName(final String fileName) {
+    @Nonnull
+    private LocalDate getFileDateFromName(@Nonnull final String fileName) {
         final String fileDateString = String.format("20%s-%s-%s", fileName.substring(5, 7), fileName.substring(7, 9), fileName.substring(9, 11));
         return LocalDate.parse(fileDateString, DTF);
     }
 
-    private boolean isFileInPeriod(final LocalDate startDate, final LocalDate endDate, final LocalDate fileDate) {
+    private boolean isFileInPeriod(@Nonnull final LocalDate startDate, @Nonnull final LocalDate endDate, @Nonnull final LocalDate fileDate) {
         return startDate.minusDays(1).isBefore(fileDate) && fileDate.isBefore(endDate.plusDays(1));
     }
 }

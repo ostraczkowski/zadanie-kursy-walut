@@ -5,6 +5,10 @@ package pl.parser.nbp;
 
 import org.xml.sax.SAXException;
 
+import javax.annotation.Nonnull;
+
+import static java.util.Objects.requireNonNull;
+
 /**
  * Specific handler implementation to parse XML data retrieved from NBP archive as a file.
  */
@@ -17,13 +21,17 @@ class XmlFromArchiveFileHandler extends ExchangeRatesXmlHandler {
     private double bidRate;
     private double askRate;
 
-    XmlFromArchiveFileHandler(final String currency) {
-        // TODO: nullcheck
+    XmlFromArchiveFileHandler(@Nonnull final String currency) {
+        requireNonNull(currency, "'currency' must not be null");
         this.currency = currency;
     }
 
     @Override
-    public void endElement(String s, String s1, String elementName) throws SAXException {
+    public void endElement(@Nonnull final String s, @Nonnull final String s1, @Nonnull final String elementName) throws SAXException {
+        requireNonNull(s, "'s' must not be null");
+        requireNonNull(s, "'s1' must not be null");
+        requireNonNull(s, "'elementName' must not be null");
+
         switch (elementName) {
             case "przelicznik":
                 ratio = Double.parseDouble(tmpValue);

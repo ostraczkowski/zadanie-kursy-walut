@@ -5,6 +5,7 @@ package pl.parser.nbp;
 
 import org.xml.sax.SAXException;
 
+import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
@@ -22,8 +23,8 @@ public class MainClass {
         final QueryParams queryParams;
         try {
             queryParams = readAndValidateQueryParams(args);
-        } catch (IllegalArgumentException iae) {
-            printError(iae.getMessage());
+        } catch (IllegalArgumentException e) {
+            printError(e.getMessage());
             return;
         }
 
@@ -35,14 +36,17 @@ public class MainClass {
             return;
         }
 
-        // calculate the result
-        final Double average = StatisticsCalculator.average(exchangeRates.getBidRates());
-        final Double stdDeviation = StatisticsCalculator.stdDeviation(exchangeRates.getAskRates());
-
-        printResult(average, stdDeviation);
+        try {
+            final Double average = StatisticsCalculator.average(exchangeRates.getBidRates());
+            final Double stdDeviation = StatisticsCalculator.stdDeviation(exchangeRates.getAskRates());
+            printResult(average, stdDeviation);
+        } catch (IllegalArgumentException e) {
+            printError(e.getMessage());
+        }
     }
 
-    private static QueryParams readAndValidateQueryParams(final String[] args) throws IllegalArgumentException {
+    @Nonnull
+    private static QueryParams readAndValidateQueryParams(@Nonnull final String[] args) {
         final InputValidator inputValidator = new InputValidator();
         if (!inputValidator.isInputValid(args)) {
             throw new IllegalArgumentException(inputValidator.getErrorMessage());
@@ -50,13 +54,14 @@ public class MainClass {
         return new QueryParams(args[0], args[1], args[2]);
     }
 
-    private static ExchangeRates readExchangeRates(final QueryParams queryParams) throws IOException, ParserConfigurationException, SAXException {
+    @Nonnull
+    private static ExchangeRates readExchangeRates(@Nonnull final QueryParams queryParams) throws IOException, ParserConfigurationException, SAXException {
         final ExchangeRatesService exchangeRatesService = new ExchangeRatesService();
         try {
             return exchangeRatesService.readExchangeRates(
                     queryParams.getCurrency(),
-                    queryParams.getStartDate(),
-                    queryParams.getEndDate()
+                    queryParams.getStartDateString(),
+                    queryParams.getEndDateString()
             );
         } catch (IOException ioe) {
             throw new IOException("No connection to the server", ioe);
@@ -72,7 +77,7 @@ public class MainClass {
         System.out.println(standardDeviation);
     }
 
-    private static void printError(final String message) {
+    private static void printError(@Nonnull final String message) {
         System.out.println("Error: " + message);
     }
 }

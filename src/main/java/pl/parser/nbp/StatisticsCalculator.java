@@ -3,6 +3,7 @@
  */
 package pl.parser.nbp;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -14,8 +15,10 @@ class StatisticsCalculator {
     /**
      * @param values values to calculate the statistic
      * @return average of given values or NaN
+     * @throws IllegalArgumentException
      */
-    static Double average(final Double... values) {
+    @Nonnull
+    static Double average(final Double... values) throws IllegalArgumentException {
         if (values.length == 0) {
             throw new IllegalArgumentException("Values list must not be empty");
         }
@@ -25,8 +28,10 @@ class StatisticsCalculator {
     /**
      * @param values values to calculate the statistic
      * @return standard deviation value or NaN
+     * @throws IllegalArgumentException
      */
-    static Double stdDeviation(final Double... values) {
+    @Nonnull
+    static Double stdDeviation(final Double... values) throws IllegalArgumentException {
         if (values.length == 0) {
             throw new IllegalArgumentException("Values list must not be empty");
         }

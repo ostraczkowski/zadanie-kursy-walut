@@ -52,8 +52,6 @@ class InputValidator {
     }
 
     private boolean isCurrencyValid(@Nonnull final String currency) {
-        requireNonNull(currency, "'currency' must not be null");
-
         final Pattern pattern = Pattern.compile("[a-zA-Z]{3}");
         final Matcher matcher = pattern.matcher(currency);
         if (!matcher.matches()) {
@@ -64,9 +62,6 @@ class InputValidator {
     }
 
     private boolean areDatesValid(@Nonnull final String startDateString, @Nonnull final String endDateString) {
-        requireNonNull(startDateString, "'startDateString' must not be null");
-        requireNonNull(endDateString, "'endDateString' must not be null");
-
         final LocalDate startDate = LocalDate.parse(startDateString, DTF);
         final LocalDate endDate = LocalDate.parse(endDateString, DTF);
         if (startDate.isAfter(endDate)) {

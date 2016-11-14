@@ -3,7 +3,10 @@
  */
 package pl.parser.nbp;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Immutable POJO which holds response data.
@@ -17,16 +20,21 @@ class ExchangeRates {
      * @param bidRates list of bid exchange rates for given currency read from NBP
      * @param askRates list of ask exchange rates for given currency read from NBP
      */
-    ExchangeRates(final Double[] bidRates, final Double[] askRates) {
-        // TODO: nullcheck
+    @Nonnull
+    ExchangeRates(@Nonnull final Double[] bidRates, @Nonnull final Double[] askRates) {
+        requireNonNull(bidRates, "'bidRates' must not be null");
+        requireNonNull(askRates, "'askRates' must not be null");
+
         this.bidRates = bidRates;
         this.askRates = askRates;
     }
 
+    @Nonnull
     Double[] getBidRates() {
         return bidRates;
     }
 
+    @Nonnull
     Double[] getAskRates() {
         return askRates;
     }
