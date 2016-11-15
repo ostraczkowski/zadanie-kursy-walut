@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
 @RunWith(Parameterized.class)
 public class ExchangeRatesServiceTest {
 
-    private final ExchangeRatesService exchangeRatesService = new ExchangeRatesService(); // TODO: DI
+    private final ExchangeRatesService exchangeRatesService = new ExchangeRatesService();
 
     // given
     private String currency;
@@ -36,10 +36,10 @@ public class ExchangeRatesServiceTest {
     @Parameterized.Parameters
     public static Collection getTestParameters() {
         return Arrays.asList(new Object[][]{
-//                {"EUR", "2002-01-02", "2002-01-02", 3.5016, 0.0}, // 1-day query
-//                {"EUR", "2013-01-28", "2013-01-31", 4.150525, 0.012477053939131748}, // 3-days query
-                {"EUR", "2002-01-02", "2002-03-31", 3.580911111111111, 0.03967698056299293},
-                {"EUR", "2002-01-02", "2016-09-01", 3.580911111111111, 0.03967698056299293},
+                {"EUR", "2002-01-02", "2002-01-02", 3.5016, 0.0}, // 1-day query
+                {"EUR", "2013-01-28", "2013-01-31", 4.150525, 0.012477053939131748}, // 3-days query
+                {"EUR", "2002-01-02", "2002-03-31", 3.580911111111111, 0.03967698056299293}, // over MAX_API_PERIOD_DAYS query (reading from files should be used here)
+//                {"EUR", "2002-01-02", "2016-09-01", 4.055777462887989, 0.29801378039587295}, // over MAX_API_PERIOD_DAYS query, huge test (reading from files should be used here)
         });
     }
 

@@ -20,25 +20,12 @@ public class MainClass {
      * @param args exactly three arguments expected given as <currency> <date from> <date to> (e.g. EUR 2013-01-28 2013-01-31)
      */
     public static void main(final String[] args) {
-        final QueryParams queryParams;
-        try {
-            queryParams = readAndValidateQueryParams(args);
-        } catch (IllegalArgumentException e) {
-            printError(e.getMessage());
-            return;
-        }
-
         final ExchangeRates exchangeRates;
         try {
+            final QueryParams queryParams = readAndValidateQueryParams(args);
             exchangeRates = readExchangeRates(queryParams);
-        } catch (IOException | ParserConfigurationException | SAXException e) {
-            printError(e.getMessage());
-            return;
-        }
-
-        try {
             printResult(exchangeRates.getAvgBidRate(), exchangeRates.getStdDevAskRate());
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | IOException | ParserConfigurationException | SAXException e) {
             printError(e.getMessage());
         }
     }
@@ -63,12 +50,12 @@ public class MainClass {
                     queryParams.getStartDateString(),
                     queryParams.getEndDateString()
             );
-        } catch (IOException ioe) {
-            throw new IOException("No connection to the server", ioe);
-        } catch (ParserConfigurationException pce) {
-            throw new ParserConfigurationException("Invalid XML parser configuration");
-        } catch (SAXException se) {
-            throw new SAXException("Invalid XML data", se);
+        } catch (IOException e) {
+            throw new IOException("No connection to the server", e);
+        } catch (ParserConfigurationException e) {
+            throw new ParserConfigurationException("Invalid XML configuration");
+        } catch (SAXException e) {
+            throw new SAXException("Invalid XML data", e);
         }
     }
 

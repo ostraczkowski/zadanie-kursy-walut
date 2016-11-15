@@ -26,7 +26,7 @@ class ExchangeRatesService {
 
     private final static Logger LOG = LoggerFactory.getLogger(ExchangeRatesService.class);
 
-    private final ExchangeRatesRequestsHelper requestsHelper = new ExchangeRatesRequestsHelper(); // TODO: DJ
+    private final ExchangeRatesRequestsHelper requestsHelper = new ExchangeRatesRequestsHelper();
 
     /**
      * Maximum period in days when NBP API can be used to retrieve the result.
@@ -62,7 +62,7 @@ class ExchangeRatesService {
     private ExchangeRates readExchangeRatesFromQueryResult(@Nonnull final String currency, @Nonnull final String startDateString, @Nonnull final String endDateString)
             throws IOException, ParserConfigurationException, SAXException {
         final InputStream xmlStream = requestsHelper.getQueryResultStream(currency, startDateString, endDateString);
-        final ExchangeRatesXmlHandler xmlHandler = ExchangeRatesResponseParser.parseXmlFromApi(xmlStream); // TODO: DJ
+        final ExchangeRatesXmlHandler xmlHandler = ExchangeRatesResponseParser.parseXmlFromApi(xmlStream);
         return new ExchangeRates(xmlHandler.getBidRates(), xmlHandler.getAskRates());
     }
 
@@ -72,12 +72,11 @@ class ExchangeRatesService {
         final List<Double> tmpBidRates = new LinkedList<>();
         final List<Double> tmpAskRates = new LinkedList<>();
         for (int year = startDate.getYear(); year <= endDate.getYear(); year++) {
-            final List<String> lines;
             try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(requestsHelper.getArchivedFilesIndexStream(year)))) {
-                lines = bufferedReader.lines().collect(Collectors.toList());
-            }
-            for (final String fileName : lines) {
-                processFileIfRequired(fileName, currency, startDate, endDate, tmpBidRates, tmpAskRates);
+                final List<String> lines = bufferedReader.lines().collect(Collectors.toList());
+                for (final String fileName : lines) {
+                    processFileIfRequired(fileName, currency, startDate, endDate, tmpBidRates, tmpAskRates);
+                }
             }
         }
         final Double[] bidRates = tmpBidRates.toArray(new Double[tmpBidRates.size()]);

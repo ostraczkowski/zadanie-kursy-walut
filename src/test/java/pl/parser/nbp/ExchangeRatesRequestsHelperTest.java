@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 @Category(IntegrationTest.class)
 public class ExchangeRatesRequestsHelperTest {
 
-    private final ExchangeRatesRequestsHelper requestsHelper = new ExchangeRatesRequestsHelper(); // TODO: DI?
+    private final ExchangeRatesRequestsHelper requestsHelper = new ExchangeRatesRequestsHelper();
 
     @Test
     public void testGettingQueryResulStreamUnderMaxPeriod() throws IOException {
