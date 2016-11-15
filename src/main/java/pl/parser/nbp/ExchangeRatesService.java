@@ -6,6 +6,7 @@ package pl.parser.nbp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+import sun.plugin.dom.exception.InvalidStateException;
 
 import javax.annotation.Nonnull;
 import javax.xml.parsers.ParserConfigurationException;
@@ -41,7 +42,7 @@ class ExchangeRatesService {
      */
     @Nonnull
     ExchangeRates readExchangeRates(@Nonnull final String currency, @Nonnull final String startDateString, @Nonnull final String endDateString)
-            throws IOException, ParserConfigurationException, SAXException {
+            throws IllegalArgumentException, InvalidStateException, IOException, ParserConfigurationException, SAXException {
         requireNonNull(currency, "'currency' must not be null");
         requireNonNull(startDateString, "'startDateString' must not be null");
         requireNonNull(endDateString, "'endDateString' must not be null");
@@ -60,7 +61,7 @@ class ExchangeRatesService {
 
     @Nonnull
     private ExchangeRates readExchangeRatesFromQueryResult(@Nonnull final String currency, @Nonnull final String startDateString, @Nonnull final String endDateString)
-            throws IOException, ParserConfigurationException, SAXException {
+            throws IllegalArgumentException, IOException, ParserConfigurationException, SAXException {
         final InputStream xmlStream = requestsHelper.getQueryResultStream(currency, startDateString, endDateString);
         final ExchangeRatesXmlHandler xmlHandler = ExchangeRatesResponseParser.parseXmlFromApi(xmlStream);
         return new ExchangeRates(xmlHandler.getBidRates(), xmlHandler.getAskRates());
@@ -68,7 +69,7 @@ class ExchangeRatesService {
 
     @Nonnull
     private ExchangeRates readExchangeRatesFromArchivedFiles(@Nonnull final String currency, @Nonnull final LocalDate startDate, @Nonnull final LocalDate endDate)
-            throws ParserConfigurationException, SAXException, IOException {
+            throws IllegalArgumentException, ParserConfigurationException, SAXException, IOException {
         final List<Double> tmpBidRates = new LinkedList<>();
         final List<Double> tmpAskRates = new LinkedList<>();
         for (int year = startDate.getYear(); year <= endDate.getYear(); year++) {
@@ -85,12 +86,19 @@ class ExchangeRatesService {
     }
 
     private void processFileIfRequired(@Nonnull final String fileName, @Nonnull final String currency, @Nonnull final LocalDate startDate, @Nonnull final LocalDate endDate, @Nonnull final List<Double> tmpBidRates, @Nonnull final List<Double> tmpAskRates)
-            throws IOException, ParserConfigurationException, SAXException {
+            throws IllegalArgumentException, IllegalStateException, IOException, ParserConfigurationException, SAXException {
         if (isFileWithBidAndAskTable(fileName)) {
             final LocalDate fileDate = getFileDateFromName(fileName);
             if (isFileInPeriod(startDate, endDate, fileDate)) {
                 final InputStream xmlStream = requestsHelper.getArchivedFileStream(fileName + ".xml");
                 final ExchangeRatesXmlHandler xmlHandler = ExchangeRatesResponseParser.parseXmlFromArchiveFile(xmlStream, currency);
+                if (xmlHandler.getBidRates().length == 0 && xmlHandler.getAskRates().length == 0) {
+                    throw new IllegalArgumentException("No data for given parameters");
+                } else if (xmlHandler.getBidRates().length == 0) {
+                    throw new IllegalStateException("Only ASK rate found");
+                } else if (xmlHandler.getAskRates().length == 0) {
+                    throw new IllegalStateException("Only BID rate found");
+                }
                 tmpBidRates.add(xmlHandler.getBidRates()[0]);
                 tmpAskRates.add(xmlHandler.getAskRates()[0]);
             }

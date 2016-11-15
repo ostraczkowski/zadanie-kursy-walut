@@ -4,6 +4,7 @@
 package pl.parser.nbp;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -35,13 +36,21 @@ class ExchangeRatesRequestsHelper {
     }
 
     @Nonnull
-    private static InputStream readStream(@Nonnull final String url, @Nonnull final String contentType) throws IOException {
+    private static InputStream readStream(@Nonnull final String url, @Nonnull final String contentType)
+            throws IllegalArgumentException, IOException {
         final HttpClient client = HttpClientBuilder.create().build();
         final HttpGet request = new HttpGet(url);
         request.setHeader("Content-Type", contentType);
         LOG.debug("Reading stream from: " + url);
         final HttpResponse response = client.execute(request);
-        return response.getEntity().getContent();
+        switch (response.getStatusLine().getStatusCode()) {
+            case HttpStatus.SC_OK:
+                return response.getEntity().getContent();
+            case HttpStatus.SC_NOT_FOUND:
+                throw new IllegalArgumentException("No data for given parameters");
+            default:
+                throw new RuntimeException("URL formula failed");
+        }
     }
 
     /**
@@ -53,7 +62,7 @@ class ExchangeRatesRequestsHelper {
      */
     @Nonnull
     InputStream getQueryResultStream(@Nonnull final String currency, @Nonnull final String startDateString, @Nonnull final String endDateString)
-            throws IOException {
+            throws IllegalArgumentException, IOException {
         requireNonNull(currency, "'currency' must not be null");
         requireNonNull(startDateString, "'startDateString' must not be null");
         requireNonNull(endDateString, "'endDateString' must not be null");
@@ -69,7 +78,7 @@ class ExchangeRatesRequestsHelper {
      */
     @Nonnull
     InputStream getArchivedFileStream(@Nonnull final String fileName)
-            throws IOException {
+            throws IllegalArgumentException, IOException {
         requireNonNull(fileName, "'fileName' must not be null");
 
         final String url = String.format("http://www.nbp.pl/kursy/xml/%s", fileName);
@@ -83,7 +92,7 @@ class ExchangeRatesRequestsHelper {
      */
     @Nonnull
     InputStream getArchivedFilesIndexStream(final int year)
-            throws IOException {
+            throws IllegalArgumentException, IOException {
         if (year < Year.now().getValue()) {
             final String url = String.format("http://www.nbp.pl/kursy/xml/dir%s.txt", year);
             return readTxtStream(url);

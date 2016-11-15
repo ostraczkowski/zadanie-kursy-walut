@@ -25,7 +25,7 @@ public class MainClass {
             final QueryParams queryParams = readAndValidateQueryParams(args);
             exchangeRates = readExchangeRates(queryParams);
             printResult(exchangeRates.getAvgBidRate(), exchangeRates.getStdDevAskRate());
-        } catch (IllegalArgumentException | IOException | ParserConfigurationException | SAXException e) {
+        } catch (IllegalArgumentException | IllegalStateException | IOException | ParserConfigurationException | SAXException e) {
             printError(e.getMessage());
         }
     }

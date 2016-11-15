@@ -36,7 +36,7 @@ public class StatisticsCalculatorTest {
     }
 
     @Test
-    public void testAverageCalculation() {
+    public void shouldCalculateAverage() {
         // when
         final Double actualResult = StatisticsCalculator.average(testValues);
 
@@ -45,7 +45,7 @@ public class StatisticsCalculatorTest {
     }
 
     @Test
-    public void testStdDeviationCalculation() {
+    public void shouldCalculateStdDeviation() {
         // when
         final Double actualResult = StatisticsCalculator.stdDeviation(testValues);
 

@@ -52,7 +52,7 @@ public class ExchangeRatesServiceTest {
     }
 
     @Test
-    public void testReadingExchangeRates() {
+    public void shouldReadExchangeRates() {
         // when
         final ExchangeRates exchangeRates;
         try {

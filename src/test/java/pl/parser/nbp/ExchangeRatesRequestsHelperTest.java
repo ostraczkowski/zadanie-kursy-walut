@@ -3,8 +3,10 @@
  */
 package pl.parser.nbp;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.rules.ExpectedException;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedReader;
@@ -26,8 +28,11 @@ public class ExchangeRatesRequestsHelperTest {
 
     private final ExchangeRatesRequestsHelper requestsHelper = new ExchangeRatesRequestsHelper();
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Test
-    public void testGettingQueryResulStreamUnderMaxPeriod() throws IOException {
+    public void shouldGetQueryResulStreamUnderMaxPeriod() throws Exception {
         // given
         final InputStream sampleXmlStream = this.getClass().getClassLoader().getResourceAsStream("sample-api-under-93-days-data.xml");
         final String sampleXmlString = readStream(sampleXmlStream);
@@ -44,7 +49,7 @@ public class ExchangeRatesRequestsHelperTest {
     }
 
     @Test
-    public void testGettingQueryResulStreamAtMaxPeriod() throws IOException {
+    public void shouldGetQueryResulStreamAtMaxPeriod() throws Exception {
         // given
         final InputStream sampleXmlStream = this.getClass().getClassLoader().getResourceAsStream("sample-api-at-93-days-data.xml");
         final String sampleXmlString = readStream(sampleXmlStream);
@@ -62,22 +67,35 @@ public class ExchangeRatesRequestsHelperTest {
     }
 
     @Test
-    public void testGettingQueryResulStreamOverMaxPeriod() throws IOException {
+    public void shouldThrowExceptionWhenGettingQueryResulStreamOverMaxPeriod() throws Exception {
         // given
         final LocalDate startDate = LocalDate.parse("2016-09-01", InputValidator.DTF);
         final LocalDate endDate = LocalDate.parse("2016-12-31", InputValidator.DTF);
         assertTrue(ChronoUnit.DAYS.between(startDate, endDate.plusDays(1)) > ExchangeRatesService.MAX_API_PERIOD_DAYS);
 
-        // when
-        final InputStream xmlStream = requestsHelper.getQueryResultStream("EUR", startDate.toString(), endDate.toString());
-        final String xmlString = readStream(xmlStream);
+        expectedException.expect(RuntimeException.class);
+        expectedException.expectMessage("URL formula failed");
 
-        // then
-        assertEquals("400 BadRequest - Błędny zakres dat / Invalid date range", xmlString);
+        // when
+        requestsHelper.getQueryResultStream("EUR", startDate.toString(), endDate.toString());
     }
 
     @Test
-    public void testArchivedFileStream() throws IOException {
+    public void shouldThrowExceptionWhenGettingQueryResulStreamForInvalidCurrency() throws Exception {
+        // given
+        final LocalDate startDate = LocalDate.parse("2016-09-01", InputValidator.DTF);
+        final LocalDate endDate = LocalDate.parse("2016-09-30", InputValidator.DTF);
+        assertTrue(ChronoUnit.DAYS.between(startDate, endDate.plusDays(1)) < ExchangeRatesService.MAX_API_PERIOD_DAYS);
+
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectMessage("No data for given parameters");
+
+        // when
+        requestsHelper.getQueryResultStream("XXX", startDate.toString(), endDate.toString());
+    }
+
+    @Test
+    public void shouldGetArchivedFileStream() throws Exception {
         // given
         final InputStream sampleXmlStream = this.getClass().getClassLoader().getResourceAsStream("sample-archive-file-data.xml");
         final String sampleXmlString = readStream(sampleXmlStream);
@@ -90,9 +108,8 @@ public class ExchangeRatesRequestsHelperTest {
         assertEquals(sampleXmlString, xmlString);
     }
 
-
     @Test
-    public void testGettingArchivedFilesIndexStream() throws IOException {
+    public void shouldGetArchivedFilesIndexStream() throws Exception {
         // given
         final InputStream sampleIndexStream = this.getClass().getClassLoader().getResourceAsStream("sample-index.txt");
         final String sampleIndexString = readStream(sampleIndexStream);

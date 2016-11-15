@@ -12,7 +12,7 @@ public class InputValidatorTest {
     private InputValidator inputValidator = new InputValidator();
 
     @Test
-    public void testValidatingValidInput() {
+    public void shouldAcceptValidInput() {
         // given
         final String currencyArg = "EUR";
         final String dateFromArg = "2013-01-28";
@@ -26,7 +26,7 @@ public class InputValidatorTest {
     }
 
     @Test
-    public void testValidatingInvalidInputWithTooHistoricalDate() {
+    public void shouldNotAccepInputWithTooHistoricalDate() {
         // given
         final String currencyArg = "EUR";
         final String dateFromArg = "2002-01-01"; // 2002-01-02 is the earliest date available
@@ -40,7 +40,7 @@ public class InputValidatorTest {
     }
 
     @Test
-    public void testValidatingInvalidInputWithInvalidCurrencyCode() {
+    public void shouldNotAcceptInputWithInvalidCurrencyCode() {
         // given
         final String currencyArg = "EU";
         final String dateFromArg = "2013-01-28";
@@ -54,7 +54,7 @@ public class InputValidatorTest {
     }
 
     @Test
-    public void testValidatingInvalidInputWithDateFromAfterDateTo() {
+    public void shouldNotAcceptInputWithDateFromAfterDateTo() {
         // given
         final String currencyArg = "EUR";
         final String dateFromArg = "2013-01-31";
