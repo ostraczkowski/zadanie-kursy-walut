@@ -23,6 +23,7 @@
 
         <maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
         <maven-dependency-plugin.version>2.5.1</maven-dependency-plugin.version>
+        <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
     </properties>
 
     <dependencies>
@@ -131,6 +132,19 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!-- Remove dist directory -->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${maven-clean-plugin.version}</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>dist</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
 
         </plugins>
